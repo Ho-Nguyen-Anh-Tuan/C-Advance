@@ -142,3 +142,79 @@ gcc file1.o file2.o -o main.exe
    gcc file
 
    ```
+
+
+---
+
+## UNIT 2: STDARG - ASSERT
+
+### **Thư viện stdarg**
+
+Thư viện `stdarg` tương tự macro variadic, được sử dụng để thao tác với các hàm có số lượng tham số không xác định (như `printf` và `scanf`).
+
+#### **Các thành phần quan trọng:**
+
+1. **`va_list`**
+   - `va_list` là một typedef cho con trỏ kiểu `char*`=> va_list args = char* args
+     ```c
+     va_list args;
+     ```
+
+2. **`va_start`**
+   - Macro để khởi tạo `va_list`.
+     ```c
+     va_start(args, l); // l là tên 1 biến
+     ```
+     va_start thực hiện so sánh `l` với từng chuỗi. Khi so sánh xong thì nó tách chuối
+phía sau ra rồi lưu vào 1 mảng kí tự.
+
+3. **`va_arg`**
+   - Lấy từng tham số từ `va_list`.
+     ```c
+     int value = va_arg(args, int);
+     ```
+    va_arg lấy từng kí tự đã tách từ va_start ép kiểu mình muốn
+4. **`va_end`**
+   - Thu hồi con trỏ `va_list`.
+     ```c
+     va_end(args);
+     ```
+
+5. **`va_copy`**
+   - Sao chép trạng thái của một `va_list` trước đó.
+     ```c
+     va_copy(va_list args1, va_list args2);
+     ```
+
+---
+
+### **Thư viện assert**
+
+Cung cấp macro `assert` để kiểm tra điều kiện trong khi chạy chương trình. 
+
+- **Hoạt động:** điều kiện đúng, tiếp tục chạy. Điều kiện sai, dừng ngay lập tức
+
+- **Dùng trong:** debug.
+
+#### **Ví dụ:**
+
+```c
+#include <stdio.h>
+#include <assert.h>
+
+#define LOG(condition, cmd) assert(condition && #cmd)
+
+int main(int argc, char const *argv[])
+{
+    int x = 10;
+
+    //assert(x == 5 && "x phair bằng 5");
+    LOG(x == 5, x phai bang 5);
+    printf("x = %d", x);
+
+    return 0;
+}
+
+```
+
+
