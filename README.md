@@ -1,7 +1,8 @@
 # Advanced C 🔠
-<details><summary>**##UNIT 1: COMPILER AND MARCO**</summary>
+<details><summary>UNIT 1: COMPILER AND MARCO</summary>
 <p>
 
+## UNIT 1: COMPILER AND MACRO
 ### **Quá trình biên dịch**
 
 Quá trình biên dịch bao gồm nhiều giai đoạn chuyển đổi từ ngôn ngữ bậc cao sang ngôn ngữ mà máy tính có thể hiểu được (machine code).
@@ -147,10 +148,10 @@ gcc file1.o file2.o -o main.exe
 </p>
 </details>
 
-<details><summary>**##UNIT 2: STDARG - ASSERT**</summary>
+<details><summary>UNIT 2: STDARG - ASSERT</summary>
 <p>
+   
 ## UNIT 2: STDARG - ASSERT
-
 ### **Thư viện stdarg**
 
 Thư viện `stdarg` tương tự macro variadic, được sử dụng để thao tác với các hàm có số lượng tham số không xác định (như `printf` và `scanf`).
