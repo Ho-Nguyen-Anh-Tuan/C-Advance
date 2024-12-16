@@ -1,5 +1,6 @@
 # Advanced C 🔠
-
+<details><summary>UNIT 1: COMPILER AND MARCO</summary>
+<p>
 ## UNIT 1: COMPILER AND MACRO
 
 ### **Quá trình biên dịch**
@@ -144,7 +145,11 @@ gcc file1.o file2.o -o main.exe
    ```
 
 ---
+</p>
+</details>
 
+<details><summary>UNIT 2: STDARG - ASSERT</summary>
+<p>
 ## UNIT 2: STDARG - ASSERT
 
 ### **Thư viện stdarg**
@@ -215,4 +220,5 @@ int main(int argc, char const *argv[])
 }
 
 ```
-
+</p>
+</details>
