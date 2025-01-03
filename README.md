@@ -494,6 +494,60 @@ int **pt2 = &ptr;
 <details><summary>UNIT 5: STORAGE CLASSES</summary>
 <p>
 
+## Unit 5: STORAGE CLASSES
+
+### 1. Extern
+- Cú pháp: `extern <data_type> <name_variable>`
+- **Công dụng**: Dùng để sử dụng 1 biến khai báo trong file khác mà không cần include file định nghĩa biến.
+- Khi dùng `extern`, **chỉ khai báo**, không định nghĩa lại giá trị hay nội dung.
+- Khi liên kết file, dùng lệnh: `gcc file1.c file2.c -o main.exe`.
+- Những biến và hàm nào muốn sử dụng trong file khác nên khai báo `extern` trong file header (.h).
+- **Giới hạn**: Chỉ sử dụng cho biến toàn cục.
+
+---
+
+### 2. Static Local (Biến Static Cục Bộ)
+- Khi khai báo `static`, biến sẽ không nằm trong stack mà chuyển sang vùng data hoặc bss.
+- **Đặc điểm**:
+  - Chỉ khởi tạo một lần duy nhất.
+  - Phạm vi là cục bộ.
+  - Giữ nguyên địa chỉ và giá trị sau khi hết phạm vi sử dụng.
+  - Có thể dùng con trỏ để thay đổi giá trị.
+
+---
+
+### 3. Static Global (Biến Static Toàn Cục)
+- **Đặc điểm**:
+  - Giới hạn phạm vi của biến hoặc hàm trong file nguồn hiện tại.
+  - File khác không thể truy cập biến, hàm đó ngay cả khi dùng `extern`.
+  - Đảm bảo tính trừu tượng và bảo mật dữ liệu.
+
+---
+
+### 4. Register
+- **Chức năng**:
+  - Lưu trực tiếp biến trên thanh ghi thay vì RAM.
+  - Tăng tốc độ chương trình.
+- **Giới hạn**:
+  - Chỉ sử dụng cho biến cục bộ.
+  - Không khuyến khích dùng cho biến toàn cục do giảm tính linh hoạt của thanh ghi.
+- **Ứng dụng**:
+  - Dùng cho tính toán số học được truy xuất liên tục.
+
+---
+
+### 5. Volatile 
+- **Chức năng**:
+  - Ngăn trình biên dịch tối ưu hóa biến khi nhận thấy biến không thay đổi sau nhiều lần chạy.
+  - Đảm bảo giá trị của biến được cập nhật liên tục từ các tác động ngoài (như ngắt hoặc thanh ghi).
+- **Cách dùng**:
+  - Thêm từ khoá `volatile` khi khai báo biến: `volatile <data_type> <variable_name>`.
+- **Ứng dụng**:
+  - Dùng khi biến thay đổi từ bên ngoài.
+
+---
+
+
 
 </p>
 </details>
