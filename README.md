@@ -555,6 +555,106 @@ int **pt2 = &ptr;
 <details><summary>UNIT 6: STRUCT - UNION</summary>
 <p>
 
+## Unit 6: Struct - Union
+
+### Struct
+
+Struct là 1 kiểu dữ liệu tự định nghĩa, nghĩa là ta nhóm các dữ liệu khác nhau lại.
+
+#### 2 cách tạo struct:
+
+```c
+struct Point
+{
+    int x, y;
+};
+struct Point p1, p2;
+
+typedef struct
+{
+    int x, y;
+} Point;
+Point p1, p2;
+```
+
+Truy xuất dữ liệu: `.` hoặc `->`
+
+#### Data Alignment
+
+Các biến thành phần của struct được sắp xếp phù hợp theo yêu cầu căn chỉnh của CPU.
+Các địa chỉ của biến thành viên struct *liền kề* với nhau. CPU quy định biến nằm ở địa chỉ bắt đầu chia hết cho **kích thước** của nó.
+
+- double (8 byte): 0x00, 0x08, 0x1f, ...
+- int, int32_t, uint32_t (4 byte): 0x00, 0x04, 0x08, ...
+- float, int16_t, uint16_t (2 byte): 0x00, 0x02, 0x04, ...
+- char, int8_t, uint8_t (1 byte): 0x00, 0x01, 0x02, ...
+
+#### Data Padding: Byte trống
+
+Nếu địa chỉ tiếp theo không chia hết cho biến đó, biến đó được cấp phát địa chỉ bắt đầu tiếp theo chia hết cho kích thước của nó.  
+
+Mỗi lần cấp phát vùng địa chỉ, cpu sẽ dựa vào biến có kiểu dữ liệu **lớn nhất**.
+
+##### Ví dụ:
+
+```c
+typedef struct
+{
+    int var1;   // 4 byte   // 0x00 - 0x03
+    char var2;  // 1 byte   // 0x04         // dư 0x05 - 0x07
+    char var3;  // 1 byte   // 0x05         // dư 0x06 - 0x07
+    char var5;  // 1 byte   // 0x06         // dư 0x07
+    short var4; // 2 byte   // 0x08 - 0x0b  // dư 0x0a - 0x0b
+                // xài 9 byte. Dư 0x07, 0x0a, 0x0b gọi là padding
+} Point;
+```
+#### Kích thước:  tổng kích thước của các dữ liệu thành phần và padding (nếu có).
+#### Những thành phần có địa chỉ riêng biệt.
+
+### Union
+
+Union là 1 kiểu dữ liệu tự định nghĩa.
+
+#### 2 cách tạo union giống struct:
+
+Truy xuất dữ liệu: `.` hoặc `->`
+
+#### Data Alignment:
+
+Các biến được sắp xếp vào vùng nhớ đặc biệt, được căn chỉnh bởi CPU giống struct.
+
+#### Data Padding:
+
+Những thành phần ***dùng chung vùng nhớ***.
+
+#### Kích thước:
+
+Tổng kích thước thành phần lớn nhất + padding (nếu có).
+
+### Ứng dụng Struct:
+Sử dụng để viết thư viện.
+
+### Ứng dụng kết hợp Struct và Union:
+
+Lồng struct vào union để truyền dữ liệu, khai báo các biến thành viên struct `data` cùng kiểu dữ liệu để tránh padding.
+
+Khi thêm giá trị vào các biến thành viên của `data`, mảng `frame` cũng nhận giá trị tương ứng.
+
+#### Ví dụ:
+
+```c
+typedef union {
+    struct {
+        uint8_t id[2];
+        uint8_t data[4];
+        uint8_t check_sum[2];
+    } data;
+
+    uint8_t frame[8];
+
+} Data_Frame;
+```
+
 
 </p>
 </details>
