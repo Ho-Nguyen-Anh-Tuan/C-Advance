@@ -662,6 +662,55 @@ typedef union {
 <details><summary>UNIT 7: GOTO - SETJMP</summary>
 <p>
 
+## Unit 7: Goto - Setjmp.h
+
+### Goto
+
+`goto` là một từ khóa trong C cho phép nhảy đến một nhãn (label) đã đặt trước đó **trong cùng một hàm**.
+- Label là một tên đặt trước dấu `:`.
+- Khi chương trình gặp lệnh `goto label`, nó sẽ nhảy đến label và thực thi các lệnh từ đó.
+
+```c
+goto label;
+...
+label:
+    // Dòng lệnh nhảy đến
+```
+
+- Địa chỉ để thực thi câu lệnh khác với địa chỉ cấp phát để khởi tạo biến; lệnh `goto` di chuyển thanh ghi PC đến label.
+
+#### Ứng dụng
+- Thoát khỏi nhiều vòng lặp trong 1 lần.
+- Tạo menu.
+- Quét LED.
+
+---
+
+### setjmp.h
+
+Thư viện `setjmp.h` cung cấp 2 hàm `setjmp` và `longjmp`. Cả hai hàm này dùng để nhảy từ vị trí này sang vị trí khác trong chương trình, khác với `goto` là có thể nhảy sang hàm khác.
+
+- **Hàm setjmp**:
+  - Lưu lại vị trí hiện tại mà thanh ghi PC đang chỉ vào một biến kiểu `jmp_buf`.
+  - Giá trị trả về lần đầu của `setjmp` là số 0.
+  - Lần tiếp theo trả về số khác 0, phụ thuộc vào `longjmp`.
+
+- **Hàm longjmp**:
+  - Nhảy về vị trí `setjmp` và gửi giá trị ở tham số thứ 2 đến hàm `setjmp`.
+
+#### Ứng dụng
+- Xử lý lỗi.
+
+---
+
+### Khác biệt giữa setjmp và assert
+- **assert**:
+  - Đưa ra lỗi và dừng chương trình ngay lập tức.
+
+- **setjmp**:
+  - Đưa ra lỗi nhưng chương trình vẫn tiếp tục chạy.
+
+
 
 </p>
 </details>
