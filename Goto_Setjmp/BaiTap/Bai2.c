@@ -50,8 +50,8 @@ int main(int argc, char const *argv[])
 
     // lần đầu gọi setjmp -> = 0
     TRY{
-        //readFile();
-        //networkOperation();
+        readFile();
+        networkOperation();
         calculateData();
     }
 
