@@ -718,6 +718,104 @@ Thư viện `setjmp.h` cung cấp 2 hàm `setjmp` và `longjmp`. Cả hai hàm n
 <details><summary>UNIT 8: MEMORY LAYOUT</summary>
 <p>
 
+## Unit 8: MEMORY LAYOUT
+
+Chương trình `.exe` (máy tính) hay `.hex` (vi điều khiển) lưu ở SSD hoặc Flash. Khi chạy thì copy sang RAM để chạy.
+RAM cũng chia ra các phân vùng nhỏ hơn.
+
+### Text segment (code segment)
+- Mã máy: chứa tập hợp các lệnh thực thi (lệnh PC thực thi).
+- Quyền truy cập: chỉ có quyền đọc và thực thi (_read only_).
+- Compiler Clang:
+  - Hằng số toàn cục.
+  - Chuỗi hằng.
+
+### Data segment (Initialized Data Segment)
+- Chứa biến toàn cục được khởi tạo với **giá trị khác 0**.
+- Chứa các biến static (global + local) được khởi tạo với _giá trị khác 0_.
+- Quyền truy cập là _đọc và ghi_, tức là có thể đọc và thay đổi giá trị biến.
+- Tất cả các biến sẽ được thu hồi sau khi chương trình kết thúc.
+- Compiler MinGW (gcc, g++):
+  - Hằng số toàn cục.
+  - Chuỗi hằng.
+  - Ở chế độ **Rdata**.
+
+### Bss segment (Uninitialized Data Segment)
+- Chứa biến toàn cục được khởi tạo với **giá trị bằng 0** hoặc **không gán giá trị**.
+- Chứa các biến static (global + local) được khởi tạo với _giá trị bằng 0_ hoặc _không gán giá trị_.
+- Quyền truy cập là _đọc và ghi_, tức là có thể đọc và thay đổi giá trị biến.
+- Tất cả các biến sẽ được thu hồi sau khi chương trình kết thúc.
+
+### Stack
+- Chứa các biến cục bộ (trừ static cục bộ), tham số truyền vào.
+- Hằng số cục bộ có thể thay đổi bằng con trỏ nhưng không nên thay đổi.
+- Quyền truy cập: đọc và ghi.
+- Sau khi ra khỏi hàm, sẽ thu hồi vùng nhớ (tự động).
+- **Memory Leak:** khi đệ quy mà không có điểm dừng.
+
+### Heap
+Sử dụng để cấp phát động:
+- **C:** `malloc()`, `calloc()`, `realloc()`, `free()`.
+- **C++:** `new`, `delete`.
+
+#### malloc()
+- **Cú pháp:** `void* malloc(size_t size)`.
+- Cấp phát vùng nhớ dựa theo kích thước chỉ định.
+- kích thước chỉ định: phụ thuộc vào **số lượng phần tử** và **kiểu dữ liệu**.
+- Phải dùng con trỏ để quản lý vùng nhớ được cấp phát và mặc định trỏ tới địa chỉ đầu tiên trong vùng nhớ.
+- Địa chỉ con trỏ có thế nằm ở _stack/data/bss_, nhưng địa chỉ nó trỏ tới là **heap**.
+- Kiểu tra về là `void*` nên cần **ép kiểu**.
+- Giá trị khởi tạo cho từng byte địa chỉ là giá trị rác (không khởi tạo giá trị).
+- Thu hồi thủ công (hàm `free()`) và đặt `pointer = NULL`.
+- Nếu không thu hồi thì có thể không còn đủ địa chỉ để cấp phát (memory leak).
+
+#### realloc()
+- **Cú pháp:** `void* realloc(void *ptr, size_t new_size);`
+- Thay đổi kích thước vùng nhớ đã được cấp phát bởi `malloc()` hoặc `calloc()`.
+- Giữ dữ liệu cũ, phần mở rộng không khởi tạo.
+- Thu hồi thủ công (hàm `free()`) và đặt `pointer = NULL`.
+
+#### Thu hồi vùng nhớ cấp phát động
+- `free()`.
+- Sử dụng `realloc()` và gán giá trị các _địa chỉ = 0_.
+
+## Bài tập: Calloc và điểm khác biệt so với malloc và realloc
+
+### Calloc()
+- Dùng để cấp phát động vùng nhớ dựa theo kích thước chỉ định đồng thời **gán giá trị các địa chỉ này bằng 0**.
+- **Cú pháp:** `void* calloc(size_t num_elements, size_t element_size)`
+  - `num_elements`: số lượng phần tử.
+  - `element_size`: kích thước 1 phần tử (byte).
+- Quản lý bằng con trỏ như `malloc`.
+- Kiểu tra về là `void*` nên cần **ép kiểu**.
+- Thu hồi thủ công (hàm `free()`).
+
+## Điểm khác biệt malloc, calloc và realloc
+
+**Khởi tạo giá trị:**
+- `malloc`: ***không khởi tạo vùng nhớ***, dữ liệu trong bộ nhớ có thể chứa giá trị rác.
+- `calloc`: ***có khởi tạo vùng nhớ*** bằng `0`.
+- `realloc`: giữ nguyên giá trị cũ, giá trị mở rộng không khởi tạo.
+
+**Cách cấp phát:**
+- `malloc`: **1 khối liên tục** có kích thước `size` byte -> Ta phải tự tính toán kích thước.
+  ```c
+  int *ptr = (int *)malloc(5 * sizeof(int));  // Tự nhân số phần tử
+  ```
+- `calloc`: cấp phát **nhiều phần tử**, mỗi phần tử có kích thước `size` byte -> hệ thống tự tính kích thước.
+  ```c
+  int *ptr = (int *)calloc(5, sizeof(int));  // Không cần tự nhân
+  ```
+- `realloc`:
+  1. Khi tăng kích thước:  
+   - `realloc` cố gắng mở rộng bộ nhớ ngay tại vị trí hiện tại nếu có đủ không gian trống.  
+   - Nếu không đủ không gian trống liền kề, nó sẽ cấp phát một vùng mới có kích thước lớn hơn, sao chép dữ liệu cũ sang vùng mới, rồi giải phóng vùng cũ.
+  2. Khi giảm kích thước:
+   - Nếu kích thước mới nhỏ hơn, bộ nhớ dư thừa sẽ bị "cắt bớt", nhưng địa chỉ con trỏ có thể không thay đổi.
+  3. Khi kích thước bằng 0:
+   - Nếu tham số kích thước mới là 0, `realloc` thường hoạt động như `free()`, giải phóng bộ nhớ và trả về NULL.
+
+
 
 </p>
 </details>
