@@ -3,7 +3,7 @@
 <p>
 
 ## UNIT 1: COMPILER AND MACRO
-### **Quá trình biên dịch**
+### **Quá trình biên dịch (Compile time)**
 
 Quá trình biên dịch bao gồm nhiều giai đoạn chuyển đổi từ ngôn ngữ bậc cao sang ngôn ngữ mà máy tính có thể hiểu được (machine code).
 
