@@ -50,9 +50,9 @@ int main(int argc, char const *argv[])
 
     // lần đầu gọi setjmp -> = 0
     TRY{
-        //readFile();
+        readFile();
         networkOperation();
-        //calculateData();
+        calculateData();
     }
 
     /*Catch thực hiện so sánh exception_code với lỗi trong list enum. Dính thằng nào, in lỗi thằng đó*/

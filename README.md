@@ -823,6 +823,38 @@ Sử dụng để cấp phát động:
 <details><summary>UNIT 9: STACK - QUEUE</summary>
 <p>
 
+## Unit 9: Stack - queue
+
+### Stack
+Stack (ngăn xếp) là 1 cấu trúc dữ liệu theo nguyên tắc **last in, first out**, nghĩa là phần tử cuối cùng thêm vào stack sẽ là phần tử đầu tiên lấy ra. 
+
+#### **Các thao tác cơ bản:**
+- **push** để thêm 1 phần tử vào đỉnh của stack: `push - > top++`.
+- **pop** để xóa 1 phần tử ở đỉnh stack: `pop -> top--`.
+- **peek/top** để lấy giá trị phần tử đỉnh stack.
+- Kiểm tra **stack đầy**: `top = size - 1`.
+- Kiểm tra **stack rỗng**: `top = -1`.
+
+### Queue
+Queue là cấu trúc dữ liệu theo nguyên tắc **first in, first out**.
+
+#### Linear Queue
+- **enqueue**: thêm phần tử vào **cuối** hàng đợi.
+- **dequeue**: xóa phần tử ở **đầu** hàng đợi.
+- **front** để lấy giá trị phần tử đứng đầu.
+- **rear** để lấy giá trị phần tử đứng đầu.
+- Kiểm tra hàng đợi đầy/rỗng.
+
+##### Cách thức hoạt động
+- Khi vừa khởi tạo, `front = rear = -1`. 
+- Ở lần enqueue đầu `front = rear = 0`.
+- Khi enqueue thì `rear++`, dequeue thì `front++`.  
+- **Chỉ thêm phần tử mới khi đã xóa toàn bộ phần tử hiện có (trường hợp `rear = size - 1`), dù phía trước đã có ô trống**.
+
+#### Circular Queue
+Thứ khác biệt của Circular là công thức giúp front và rear di chuyển lên và quay lại như vòng tròn khi có ô trống thay vì phải đợi xóa toàn bộ như Linear.  
+`queue->index = (queue->index + 1) % queue->size`.  
+**index**: _chỉ số của front hoặc rear_
 
 </p>
 </details>
