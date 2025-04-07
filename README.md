@@ -862,12 +862,373 @@ Thứ khác biệt của Circular là công thức giúp front và rear di chuy�
 <details><summary>UNIT 10: LINKED LIST</summary>
 <p>
 
+## Unit 10: Linked List
+
+## Giới thiệu
+**Linked List** là một cấu trúc dữ liệu dùng để lưu trữ danh sách các phần tử liên kết với nhau bằng con trỏ. Mỗi phần tử trong danh sách được gọi là một **node**, _chứa dữ liệu và con trỏ_ trỏ đến node kế tiếp.
+
+---
+
+### Cấu trúc dữ liệu
+
+```c
+typedef struct Node {
+    int data;
+    struct Node *next;
+} Node;
+```
+
+- `data`: Lưu dữ liệu của node.
+- `next`: Con trỏ trỏ đến node tiếp theo.
+
+---
+
+### Chức năng chính
+
+#### 1. Tạo node mới
+```c
+Node* createNode(int data);
+```
+- Cấp phát động bộ nhớ cho một node mới.
+- Khởi tạo dữ liệu và con trỏ `next` trỏ `NULL`.
+
+#### 2. Kiểm tra list rỗng
+```c
+bool isEmpty(Node *first);
+```
+- Kiểm tra danh sách có rỗng không.
+
+#### 3. Lấy kích thước list
+```c
+int size(Node *first);
+```
+- Trả về số lượng node trong danh sách.
+
+#### 4. Thêm node
+- **Vào cuối**: `push_back(Node **first, int data);`
+- **Vào đầu**: `push_front(Node **first, int data);`
+- **Vào vị trí bất kỳ**: `insert(Node **first, int data, int index);`
+
+#### 5. Xóa node
+- **Node đầu**: `pop_front(Node **first);`
+- **Node cuối**: `pop_back(Node **first);`
+- **Node bất kỳ**: `delete_list(Node **first, int index);`
+
+#### 6. Lấy dữ liệu
+- **Node đầu**: `front(Node *first);`
+- **Node cuối**: `back(Node *first);`
+- **Node bất kỳ**: `get(Node *first, int index);`
+
+#### 7. Hiển thị list
+```c
+display(Node *first);
+```
+- In ra toàn bộ danh sách.
+
+---
+
+## Chú ý
+- **Memory Leak**: Luôn giải phóng bộ nhớ sau khi dùng (`free()`).
+- **Quản lý con trỏ**: Chú ý khi thao tác với con trỏ để tránh lỗi segmentation fault.
+
+### Bài tập: [Here](https://github.com/Ho-Nguyen-Anh-Tuan/C-Advance/blob/main/Linked_List/test.c)
 
 </p>
 </details>
 
 <details><summary>UNIT 11: JSON</summary>
 <p>
+
+
+</p>
+</details>
+
+<details><summary>UNIT 12: BINARY SEARCH - FILE OPERATIONS</summary>
+<p>
+
+# Unit 12: Binary Search - Binary Tree
+
+## 📋 Mục lục
+- [Linear Search](#🔍-linear-search)
+- [Binary Search](#⚡-binary-search)
+- [Binary Tree](#🌳-binary-tree)
+- [Binary Search Tree (BST)](#🌲-binary-search-tree-bst)
+- [Tìm kiếm trên BST](#🔎-tìm-kiếm-trên-bst)
+- [File Operation](#📄-file-operation)
+
+---
+
+## 🔍 Linear Search
+
+Duyệt qua **từng phần tử** trong mảng để tìm phần tử cần tìm.
+
+---
+
+## ⚡ Binary Search
+
+### Các bước thực hiện:
+
+1. **Sắp xếp** mảng theo thứ tự tăng dần.
+2. Đặt con trỏ `left` và `right`.
+3. Tính `mid = (left + right) / 2`.
+4. So sánh:
+   - `arr[mid] == value`: Tìm thấy.
+   - `arr[mid] > value`: Giảm `right = mid - 1`.
+   - `arr[mid] < value`: Tăng `left = mid + 1`.
+
+### Mã nguồn:
+
+```c
+void bubbleSort(int *arr, int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (arr[i] > arr[j])
+                swap(&arr[i], &arr[j]);
+        }
+    }
+}
+
+int binarySearch(int *arr, int ArraySize, int x) {
+    // bubbleSort(arr, ArraySize);
+
+    int left = 0, right = ArraySize - 1;
+
+    while (right >= left) {
+        int mid = (left + right) / 2;
+
+        if (x == arr[mid])
+            return mid;
+        else if (x > arr[mid])
+            left = mid + 1;
+        else
+            right = mid - 1;
+    }
+
+    return -1;
+}
+```
+
+---
+
+## 🌳 Binary Tree
+
+- Cấu trúc dữ liệu dạng cây, mỗi node có **tối đa 2 nhánh**: **trái** và **phải**.
+- Công thức chỉ số cho node dạng mảng:
+  - **Gốc:** `i`
+  - **Trái:** `2i + 1`
+  - **Phải:** `2i + 2`
+
+---
+
+## 🌲 Binary Search Tree (BST)
+
+- **BST** là dạng đặc biệt của cây nhị phân, phục vụ tìm kiếm nhanh.
+- Quy tắc:
+  - **Node trái** nhỏ hơn **node gốc**.
+  - **Node phải** lớn hơn **node gốc**.
+
+### Cấu trúc node:
+
+```c
+typedef struct TreeNode {
+    int data;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+```
+
+---
+
+## 🛠 Xây dựng BST
+
+### Các bước:
+
+1. **Sắp xếp** linked list theo thứ tự tăng dần.
+2. Tính `mid = (start + end)/2`.
+3. **Tạo node** gốc từ mid.
+4. **Xây cây con trái** (`start → mid-1`) và **cây con phải** (`mid+1 → end`).
+
+### Mã nguồn:
+
+```c
+TreeNode *buildTree(Node *head, int start, int end) {
+    if (head == NULL || start > end)
+        return NULL;
+
+    int mid = (start + end) / 2;
+    Node *node = head;
+    for (size_t i = start; i < mid; i++) {
+        if (node->next == NULL)
+            break;
+        node = node->next;
+    }
+
+    TreeNode *root = (TreeNode*)malloc(sizeof(TreeNode));
+    root->data = node->data;
+    root->left = buildTree(head, start, mid - 1);
+    root->right = buildTree(node->next, mid + 1, end);
+
+    return root;
+}
+
+TreeNode *Certainpoint(Node *head) {
+    int length = 0;
+    Node *node = head;
+    while (node != NULL) {
+        node = node->next;
+        ++length;
+    }
+
+    return buildTree(head, 0, length - 1);
+}
+```
+
+---
+
+## 🔎 Tìm kiếm trên BST
+
+### Các bước:
+
+1. **So sánh** giá trị cần tìm với node hiện tại.
+2. Nếu bằng, **trả về node**.
+3. Nếu nhỏ hơn, **tìm bên trái**.
+4. Nếu lớn hơn, **tìm bên phải**.
+5. Nếu node rỗng, **không tìm thấy**.
+
+### Mã nguồn:
+
+```c
+TreeNode *binarySearch(TreeNode *root, int value) {
+    static int loop = 0;
+    loop++;
+    printf("Số lần lặp: %d\n", loop);
+
+    if (root == NULL)
+        return NULL;
+
+    if (value == root->data)
+        return root;
+    else if (value < root->data)
+        return binarySearch(root->left, value);
+    else
+        return binarySearch(root->right, value);
+}
+```
+
+---
+
+## 📄 File Operation
+
+- **`fopen()`** dùng để mở file, trả về con trỏ `FILE*`.
+- **Phải kiểm tra** kết quả mở file.
+- **`fclose`** dùng để đóng file sau khi thao tác.
+- `feof()`: Để kiểm tra địa chỉ hiện tại có phải ký tự cuối cùng của File hay chưa
+
+
+### Các tham số:
+
+| Đường dẫn | Ý nghĩa |
+|:---------|:--------|
+| **Absolute Path** | Ví dụ: `D:\\Folder\\file.txt` |
+| **Relative Path** | Ví dụ: `..\\FILE\\file.txt` (`..` nghĩa là thư mục cha) |
+
+### Các chế độ mở file:
+
+<img src="https://github.com/user-attachments/assets/262ae9f1-708e-4459-8129-7c74e31f49c0" alt="text" style="width: 80%; height: auto;">
+
+<img src="https://github.com/user-attachments/assets/61a96708-3828-4cff-9b91-cecd991c9801" alt="text" style="width: 80%; height: auto;">
+
+<img src="https://github.com/user-attachments/assets/863d87f7-d6f6-4db2-9eaa-90bd31ffb27d" alt="text" style="width: 80%; height: auto;">
+
+### Các thao tác với file:  
+
+<img src="https://github.com/user-attachments/assets/8ad0cd36-9119-4fb0-a7c2-7e47499613ac" alt="text" style="width: 80%; height: auto;">
+
+<img src="https://github.com/user-attachments/assets/5f203aa6-e935-404f-8648-78043ba6c51f" alt="text" style="width: 80%; height: auto;">
+
+## Assignment: Tìm kiếm thông tin theo tên hoặc số điện thoại
+[Video](https://youtu.be/aIPO77m69yc)  
+[Code](https://github.com/Ho-Nguyen-Anh-Tuan/C-Advance/tree/main/_12_Binary_Search-File_operation/BST_Assignment)
+
+
+</p>
+</details>
+
+<details><summary>UNIT </summary>
+<p>
+
+
+
+</p>
+</details>
+
+<details><summary>UNIT </summary>
+<p>
+
+
+
+</p>
+</details>
+
+<details><summary>UNIT </summary>
+<p>
+
+
+
+</p>
+</details>
+
+<details><summary>UNIT </summary>
+<p>
+
+
+
+</p>
+</details>
+
+<details><summary>UNIT </summary>
+<p>
+
+
+
+</p>
+</details>
+
+<details><summary>UNIT </summary>
+<p>
+
+
+
+</p>
+</details>
+
+<details><summary>UNIT </summary>
+<p>
+
+
+
+</p>
+</details>
+
+<details><summary>UNIT </summary>
+<p>
+
+
+
+</p>
+</details>
+
+<details><summary>UNIT </summary>
+<p>
+
+
+
+</p>
+</details>
+
+<details><summary>UNIT </summary>
+<p>
+
 
 
 </p>
