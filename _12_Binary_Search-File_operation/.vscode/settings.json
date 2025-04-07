@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "bubblesort.h": "c",
+        "stdlib.h": "c",
+        "bst.h": "c",
+        "list.h": "c"
+    }
+}

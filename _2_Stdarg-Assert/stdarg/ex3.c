@@ -17,7 +17,7 @@ int sum(int count, ...){
     }
 
 
-    va_end(args);
+    va_end(args);   // va_end 1 trong 2
 
     return result;
 }
